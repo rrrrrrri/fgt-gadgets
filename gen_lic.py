@@ -102,9 +102,9 @@ if __name__ == "__main__":
                             LicenseDataBlock("CREATEDATE", "1677686400"),
                             # LicenseDataBlock("UUID", "UUID"),
                             # LicenseDataBlock("CONTRACT", "CONTRACT"),
-                            LicenseDataBlock("USGFACTORY", "32"),
-                            LicenseDataBlock("LENCFACTORY", "32"),
-                            LicenseDataBlock("CARRIERFACTORY", "32"),
+                            LicenseDataBlock("USGFACTORY", "0"),
+                            LicenseDataBlock("LENCFACTORY", "0"),
+                            LicenseDataBlock("CARRIERFACTORY", "0"),
                             LicenseDataBlock("EXPIRY", "15552000"),
                         ]
     license_data = b""
