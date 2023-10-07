@@ -1,5 +1,5 @@
 """
-FortiGate license generator
+FortiGate keygen v1.1
 Copyright (C) 2023  CataLpa
 
 This program is free software: you can redistribute it and/or modify
@@ -36,17 +36,25 @@ lic_key_array = {
                 }
 
 class License:
-    aes_key_iv_length = 32            # 4 bytes
-    aes_key = b"\x61" * 32            # 32 bytes, contains iv(16 bytes) and key(16 bytes)
-    enc_data_length = None            # 4 bytes
-    enc_data = None                   # length = enc_data_length
+    fixed_aes_key = b"\x4C\x7A\xD1\x3C\x95\x3E\xB5\xC1\x06\xDA\xFC\xC3\x90\xAE\x3E\xCB"
+    fixed_aes_iv =  b"\x4C\x7A\xD1\x3C\x95\x3E\xB5\xC1\x06\xDA\xFC\xC3\x90\xAE\x3E\xCB"
+    fixed_rsa_header = b"\x78\x99\xBF\xA5\xEF\x56\xAA\x98\xC1\x0B\x87\x2E\x30\x8E\x54\xF9\x71\xAD\x13\xEA\xAA\xBC\xE2\x0C\xB3\xAE\x65\xAE\xF9\x0E\x9B\xD1\x88\xC7\xFE\xBC\x86\x65\xFE\xE7\x62\xDE\x43\x0B\x02\x15\x36\xC8\xC5\xCD\x0E\xB9\x01\x97\xCE\x82\x27\x0F\x69\x7F\x6A\x29\xEC\x1C"
+    
+    rsa_header_length = len(fixed_rsa_header)    # 4 bytes
+    aes_key = fixed_aes_iv + fixed_aes_key       # 32 bytes  iv + key
+    enc_data_length = None
+    enc_data = None
     license_data = None
-
+    
+    license_header = "-----BEGIN FGT VM LICENSE-----\r\n"
+    license_tail = "-----END FGT VM LICENSE-----\r\n"
+    
     def __init__(self, licensedata):
         self.license_data = licensedata
     
     def encrypt_data(self):
         tmp_buf = b"\x00" * 4 + struct.pack("<I", 0x13A38693) + b"\x00" * 4 + self.license_data   # append magic number
+        
         def encrypt(data, password, iv):
             bs = 16
             pad = lambda s: s + (bs - len(s) % bs) * chr(bs - len(s) % bs).encode()
@@ -59,8 +67,8 @@ class License:
     
     def obj_to_license(self):
         buf = b""
-        buf += struct.pack("<I", self.aes_key_iv_length)
-        buf += self.aes_key
+        buf += struct.pack("<I", self.rsa_header_length)
+        buf += self.fixed_rsa_header
         buf += struct.pack("<I", self.enc_data_length)
         buf += self.enc_data
         return base64.b64encode(buf)
@@ -95,25 +103,20 @@ class LicenseDataBlock:
 if __name__ == "__main__":
     license_data_list = [
                             LicenseDataBlock("SERIALNO", "FGVMPGLICENSEDTOCATALPA"),
-                            # LicenseDataBlock("CERT", "CERT"),
-                            # LicenseDataBlock("KEY", "KEY"),
-                            # LicenseDataBlock("CERT2", "CERT2"),
-                            # LicenseDataBlock("KEY2", "KEY2"),
-                            LicenseDataBlock("CREATEDATE", "1677686400"),
-                            # LicenseDataBlock("UUID", "UUID"),
-                            # LicenseDataBlock("CONTRACT", "CONTRACT"),
+                            LicenseDataBlock("CREATEDATE", "1696089600"),
                             LicenseDataBlock("USGFACTORY", "0"),
                             LicenseDataBlock("LENCFACTORY", "0"),
                             LicenseDataBlock("CARRIERFACTORY", "0"),
-                            LicenseDataBlock("EXPIRY", "15552000"),
+                            LicenseDataBlock("EXPIRY", "31536000"),
                         ]
     license_data = b""
     for obj in license_data_list:
         license_data += obj.obj_to_bin()
 
-    license = License(license_data)
-    license.encrypt_data()
-    raw_license = license.obj_to_license().decode()
+    _lic = License(license_data)
+    _lic.encrypt_data()
+    raw_license = _lic.obj_to_license().decode()
+    
     n = 0
     lic = ""
     while True:
@@ -122,9 +125,8 @@ if __name__ == "__main__":
         lic += raw_license[n:n + 64]
         lic += "\r\n"
         n += 64
-    f = open("./lic.txt", "w")
-    f.write("-----BEGIN FGT VM LICENSE-----\r\n")
-    f.write(lic)
-    f.write("-----END FGT VM LICENSE-----\r\n")
-    f.close()
-    print("Saved to ./lic.txt")
+    
+    with open("./License.lic", "w") as f:
+        f.write(_lic.license_header + lic + _lic.license_tail)
+
+    print("[+] Saved to ./License.lic")
