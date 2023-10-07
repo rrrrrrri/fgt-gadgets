@@ -1,8 +1,6 @@
-# fos-license-gen
-
 ## Usage
 
-python3 gen_lic.py
+python3 main.py
 
 ## Related articles
 
