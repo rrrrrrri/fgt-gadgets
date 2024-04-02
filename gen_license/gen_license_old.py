@@ -1,6 +1,6 @@
 """
-FortiGate keygen v1.1
-Copyright (C) 2023  CataLpa
+FortiGate keygen v1.1 (For older versions [FGVM64 v7.2.x v7.4.?-?])
+Copyright (C) 2024  CataLpa
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ class LicenseDataBlock:
 
 if __name__ == "__main__":
     license_data_list = [
-                            LicenseDataBlock("SERIALNO", "FGVMPGLICENSEDTOCATALPA"),
+                            LicenseDataBlock("SERIALNO", "FGVMPG0000000000"),
                             LicenseDataBlock("CREATEDATE", "1696089600"),
                             LicenseDataBlock("USGFACTORY", "0"),
                             LicenseDataBlock("LENCFACTORY", "0"),
