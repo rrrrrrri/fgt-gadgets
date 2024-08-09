@@ -1,14 +1,16 @@
 # FortiGate gadgets
 
+The tools in this repository are intended for security research purposes only and should not be used in production environments.
+
 ## License
 
-Note: Only tested on FortiGate VM appliance.
+Note: Only tested on FortiGate VM appliance. 
 
 The "license_old.py" script is used for older versions. eg: FortiGate VM64 v7.4.1
 
 The "license_new.py" script is used for newer versions. eg: FortiGate VM64 v7.4.3
 
-### Usage
+### Base license
 
 For older versions, executing the command `python3 license_old.py` will generate the `License.lic` file. Just import the file into the system.
 
@@ -47,3 +49,15 @@ After starting the system, run the `python3 license_new.py` command and import t
 Note: You may need to change the network adapter IP address again after restarting the system
 
 Please see https://wzt.ac.cn/2024/04/02/fortigate_debug_env2/ for more details.
+
+### VDOM license
+
+You need to install libssl-dev first.
+
+Compile: `gcc vdom.c -o vdom -lssl -lcrypto -lz`
+
+Run: `./vdom FGVMPG0000000000 15`
+
+Import the license: `execute upd-vd-license xxx`
+
+If you see `Error: VDOM number (xxx) exceeds limit for this model` then your base license does not support too many vdoms.

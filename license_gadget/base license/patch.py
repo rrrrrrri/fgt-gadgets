@@ -1,6 +1,4 @@
 """
-FortiGate init/flatkc patch tool v1.1
-Disable system integrity checks
 Copyright (C) 2024  CataLpa
 
 This program is free software: you can redistribute it and/or modify

@@ -1,5 +1,4 @@
 """
-FortiGate rootfs.gz decrypt tool v1.0
 Copyright (C) 2024  CataLpa
 
 This program is free software: you can redistribute it and/or modify

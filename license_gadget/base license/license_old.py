@@ -1,5 +1,4 @@
 """
-FortiGate keygen v1.1 (For older versions [FGVM64 v7.2.x v7.4.?-?])
 Copyright (C) 2024  CataLpa
 
 This program is free software: you can redistribute it and/or modify
