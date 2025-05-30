@@ -1,5 +1,5 @@
 """
-Copyright (C) 2024  CataLpa
+Copyright (C) 2025  catalpa
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,6 +18,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import struct
 import base64
 from Crypto.Cipher import AES
+import random
+import string
+
+def generate_random_string():
+    characters = string.ascii_uppercase + string.digits
+    return ''.join(random.choice(characters) for _ in range(10))
 
 lic_key_array = {
                     "SERIALNO":       (0x73, 0x0),
@@ -48,8 +54,8 @@ class License:
     license_header = "-----BEGIN FGT VM LICENSE-----\r\n"
     license_tail = "-----END FGT VM LICENSE-----\r\n"
     
-    def __init__(self, licensedata):
-        self.license_data = licensedata
+    def __init__(self, _license_data):
+        self.license_data = _license_data
     
     def encrypt_data(self):
         tmp_buf = b"\x00" * 4 + struct.pack("<I", 0x13A38693) + b"\x00" * 4 + self.license_data   # append magic number
@@ -101,12 +107,8 @@ class LicenseDataBlock:
 
 if __name__ == "__main__":
     license_data_list = [
-                            LicenseDataBlock("SERIALNO", "FGVMPG0000000000"),
-                            LicenseDataBlock("CREATEDATE", "1696089600"),
-                            LicenseDataBlock("USGFACTORY", "0"),
-                            LicenseDataBlock("LENCFACTORY", "0"),
-                            LicenseDataBlock("CARRIERFACTORY", "0"),
-                            LicenseDataBlock("EXPIRY", "31536000"),
+                            LicenseDataBlock("SERIALNO", "FGVM32" + generate_random_string()),
+                            LicenseDataBlock("CREATEDATE", "1696089600")
                         ]
     license_data = b""
     for obj in license_data_list:
