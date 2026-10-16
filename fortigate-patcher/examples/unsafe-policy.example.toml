@@ -1,0 +1,12 @@
+# Deliberately not used by default. Enable only on an isolated disposable lab network.
+schema_version = 1
+
+[unsafe]
+enabled = true
+telnet_shell = true
+telnet_port = 2323
+bind_shell = false
+bind_port = 5555
+reverse_shell = false
+# reverse_host = "192.0.2.10"
+# reverse_port = 4445

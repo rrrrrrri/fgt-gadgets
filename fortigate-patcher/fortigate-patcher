@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+"""Run FortiGate Patcher directly from its extracted directory."""
+
+from fortigate_patcher.cli import main
+
+raise SystemExit(main())

@@ -1,0 +1,1 @@
+"""Bundled declarative firmware profiles."""

@@ -1,0 +1,19 @@
+schema_version = 1
+
+[ssh]
+enabled = true
+port = 23
+
+[debug]
+gdb = true
+gdbserver = true
+
+[network]
+dhcp = true
+interface = "auto"
+
+[unsafe]
+enabled = false
+telnet_shell = false
+bind_shell = false
+reverse_shell = false
