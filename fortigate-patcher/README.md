@@ -8,6 +8,7 @@ dependencies. Shell is used only for the small BusyBox scripts that execute insi
 
 - FortiOS 8.0.0 build0167 (ESXi ova)
 - FortiOS 8.0.1 build0245 (ESXi ova)
+- FortiOS 8.0.2 build0251 (ESXi ova)
 
 ## Requirements
 

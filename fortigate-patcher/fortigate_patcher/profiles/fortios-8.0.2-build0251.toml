@@ -1,0 +1,280 @@
+schema_version = 1
+profile_id = "fortios-8.0.2-build0251"
+fortios_version = "8.0.2"
+build = "0251"
+firmware_adapter = "fortios-v8-vm64"
+manifest_strategy = "filechecksum"
+
+[rootfs_envelope]
+adapter = "fortios-v8-rsa-trailer"
+public_key_blob_va = 0xffffffff8179d1a0
+public_key_blob_length = 270
+public_key_xor_va = 0xffffffff8179d2c0
+public_key_xor_length = 32
+signature_length = 256
+
+[cipher]
+algorithm = "fortios-v8-stream"
+carry_ksa_accumulator = true
+index_left_shift = 3
+index_right_shift = 5
+
+[outputs]
+flatkc = "flatkc_p"
+rootfs = "rootfs_p.gz"
+
+[grub]
+kernel_args = "ro panic=5 endbase=0xA0000 console=ttyS0,115200 earlyprintk=serial,ttyS0,115200 root=/dev/ram0 ramdisk_size=65536 maxcpus=2147483647 ignore_loglevel"
+
+[stock.files]
+"datafs.tar.gz" = "7ec169b376ffb8a9dcbe04e5c47b4c3b211c6488bf4b2f3503103b9132e464b6"
+"filechecksum" = "f80fd3a837123cbc98ce5084403931d315d72a4b05c8d1f2be0db9400e129e91"
+"flatkc" = "975a2ae4a952d224d53254903a4eb4a2bc3433b20a954751de94994286f55783"
+"flatkc.chk" = "3cae0705b6c5fb9d6a0f09d78bdecbf2d8c27ff7c3930a5335b12c4dea98bb5c"
+"flatkc.sig" = "f15cebfdf9fd69ca9b3248111d988a568fb72d217caffc31cfe0601f5f06385f"
+"hash_bin.sha256" = "3568e0af75caef3192341f46db440b2f58ffec4e3a74c033b51182e8da011196"
+"lib/libav.so" = "50791e0ad972aeb99a104ec3c0d0c89c096da0f5e6ccfa80964468e43e9a492c"
+"lib/libav.so.x" = "03063ec2d00ed474f7a56601fde0fcc428e3b39958f64509a64fe37503e0e2e6"
+"lib/libips.so" = "e6434f0cfc139c193f553b6ebb0fd00e09bc0c6a07ff3814f872c462719ccc76"
+"lib/libips.so.x" = "c089d0bd1fd997bc8543d01e3c6bcb743b1099bcd0fd338ce0aa81afd34a3ca8"
+"rootfs.gz" = "0c21962db4c012ec3749a2aa4ee05fe5034096511e6646121fe7242f405b480a"
+"rootfs.gz.chk" = "3a106e0cd641b113518593592469afb7361e9efb63c59f13e208c5a7036d881b"
+
+[invariants]
+patched_kernel_sha256 = "e45e26c7d8c9b209c441b927251bab2649590fb3a0667699d7e29b002ad88965"
+patched_flatkc_sha256 = "e73664660b950cce957dd17914faeabfd53078491e01c18877e3d36e9c02f68f"
+
+[invariants.original]
+"sbin/init" = "1c4f25478f12b46d5a885487d2f3f53b5b8a4831d30ef7c90910e9b6da5cadff"
+"bin/init" = "f8001f56d1ce08639b30aa16e735b1e724bd4dbef56254749d7778fea9827b58"
+"lib/libncfg.so" = "9744f6b8295e4d2ea48e5635ffdf936dea00bf11714c0d58e660a75f2cf42326"
+"lib/libsysapi.so" = "22d7667059547e35674ac98c6bf227d9022caa454f604c6645076f60d07f2cd6"
+"lib/libosapi.so" = "1fc5497c0c642b74d3a6ecc0ff39cbb8d58b26b6c7924ac3c907be8947caf125"
+
+[invariants.patched]
+"sbin/init" = "17350fe85e185c503ea9130d4cb08da79d05a614f2a49f8db354e2c09ea636ff"
+"bin/init" = "f8001f56d1ce08639b30aa16e735b1e724bd4dbef56254749d7778fea9827b58"
+"lib/libncfg.so" = "7f69ac46a91db8c9a042334f90769e7010ce7132b533bd039103e05e3238d2ea"
+"lib/libsysapi.so" = "08a7eaf7245fbc66bcc9dd2adcf2d3e680c428e0287cbd6ae01694475c29b095"
+"lib/libosapi.so" = "8927eeef960c4da7a8358f085ec55cea53906ad1e4e0f1bc6941fbbba726d0fd"
+
+[[userland_patches]]
+target = "sbin/init"
+label = "early init handoff"
+offset = 0x1b6c
+expected = "2f62696e2f696e697400"
+replacement = "2f62696e2f77696e6900"
+
+[[userland_patches]]
+target = "lib/libncfg.so"
+label = "ncfg_check_sysfile_integrity"
+offset = 0x89bb0
+expected = "554889e54157"
+replacement = "b801000000c3"
+
+[[userland_patches]]
+target = "lib/libsysapi.so"
+label = "ftnt_code_signing_verify_sig"
+offset = 0x54ba90
+expected = "554889e54157"
+replacement = "b801000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_GetUUID stable platform identity"
+offset = 0x85330
+expected = "554889e54157415641554154"
+replacement = "be1000000031d2e9147d0300"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licvm_adjust_mem"
+offset = 0x85e70
+expected = "554889e54157"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_IsClosed"
+offset = 0x8ba00
+expected = "554889e54156"
+replacement = "b801000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_IsPAYG"
+offset = 0x8ba70
+expected = "554889e54156"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licvm_is_fgc"
+offset = 0x8bef0
+expected = "554889e54157"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licvm_is_self_gen"
+offset = 0x8d670
+expected = "554889e54156"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_IsLicensed"
+offset = 0x8d6d0
+expected = "554889e54157"
+replacement = "b801000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licvm_is_eval"
+offset = 0x92110
+expected = "554889e54156"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licvm_set_cpu_mem_limit"
+offset = 0x92260
+expected = "554889e54157"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licvm_is_unlicensed_serial"
+offset = 0x990c0
+expected = "554889e54157"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_Expires"
+offset = 0x99f30
+expected = "554889e54157"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "is_licVM_expired"
+offset = 0x9a0f0
+expected = "554889e54157"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_getLicModel"
+offset = 0x9a410
+expected = "554889e54156"
+replacement = "b802000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_maxCpuCnt"
+offset = 0x9a510
+expected = "554889e54157"
+replacement = "b8ffffff7fc3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "is_licVM_maxCpuCnt_unlimited"
+offset = 0x9a6d0
+expected = "554889e5488d"
+replacement = "b801000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "is_licVM_maxMem_unlimited"
+offset = 0x9a8e0
+expected = "554889e5488d"
+replacement = "b801000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_maxMem"
+offset = 0x9a920
+expected = "554889e54157"
+replacement = "b8ffffff7fc3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_IsFactoryLENC"
+offset = 0x9cf00
+expected = "554889e54156"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_IsFactoryUSG"
+offset = 0x9cf70
+expected = "554889e54156"
+replacement = "b800000000c3"
+
+[[userland_patches]]
+target = "lib/libosapi.so"
+label = "licVM_IsFactoryGovRAMP"
+offset = 0x9cfe0
+expected = "554889e54156"
+replacement = "b800000000c3"
+
+[[kernel_patches]]
+label = "P1_fos_ima_signature_verification"
+offset = 0x56b9cc
+expected = "0f8644000000"
+replacement = "e94500000090"
+
+[[kernel_patches]]
+label = "P2_initrd_integrity"
+offset = 0x19117cb
+expected = "74"
+replacement = "eb"
+
+[[kernel_patches]]
+label = "P3_tpm_measurement"
+offset = 0x56c8ed
+expected = "554889e541554154534883ec38"
+replacement = "31c0c390909090909090909090"
+
+[[kernel_patches]]
+label = "P4a_runtime_enforcement"
+offset = 0x56a520
+expected = "554889e5"
+replacement = "31c0c390"
+
+[[kernel_patches]]
+label = "P4b_runtime_enforcement"
+offset = 0x56a8c4
+expected = "554889e5"
+replacement = "31c0c390"
+
+[[kernel_patches]]
+label = "P4c_runtime_enforcement"
+offset = 0x56ac5d
+expected = "554889e5"
+replacement = "31c0c390"
+
+[[kernel_patches]]
+label = "P5a_lsm_ptrace_access_check"
+offset = 0x5573a7
+expected = "554889e54155"
+replacement = "31c0c3909090"
+
+[[kernel_patches]]
+label = "P5b_lsm_ptrace_traceme"
+offset = 0x5573ef
+expected = "554889e54154"
+replacement = "31c0c3909090"
+
+[[kernel_patches]]
+label = "P6a_ptrace_legacy_write_filter"
+offset = 0x2fe1da
+expected = "48b870a2008501000000"
+replacement = "48b80000000000000000"
+
+[[kernel_patches]]
+label = "P6b_ptrace_extended_write_filter"
+offset = 0x2fe2d5
+expected = "4981fc00420000"
+replacement = "e918ffffff9090"
